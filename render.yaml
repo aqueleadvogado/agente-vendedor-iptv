@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: agente-vendedor-iptv
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120
+    envVars:
+      - key: LEGACY_BASE_URL
+        value: https://painellegacy.space/api
+      - key: LEGACY_USERNAME
+        sync: false
+      - key: LEGACY_PASSWORD
+        sync: false
+      - key: EVOLUTION_BASE_URL
+        sync: false
+      - key: EVOLUTION_API_KEY
+        sync: false
+      - key: EVOLUTION_INSTANCE
+        value: agente_vendedor
+      - key: ASAAS_API_KEY
+        sync: false
+      - key: WHATSAPP_NUMBER
+        sync: false
+      - key: NOME_EMPRESA
+        value: Legacy IPTV
+      - key: DIAS_AVISO_VENCIMENTO
+        value: "3"
+      - key: WEBHOOK_SECRET
+        generateValue: true
