@@ -93,17 +93,18 @@ def configurar_webhook(webhook_url: str) -> dict:
     """
     Registra a URL de webhook na instância Evolution para receber mensagens.
     Chame uma vez durante o setup.
+    Compatível com Evolution API v2 (usa POST em vez de PUT).
     """
     payload = {
         "webhook": {
             "enabled": True,
             "url":     webhook_url,
-            "events":  ["messages.upsert"],
+            "events":  ["MESSAGES_UPSERT"],
             "webhookByEvents": False,
             "webhookBase64":   False,
         }
     }
-    resp = requests.put(
+    resp = requests.post(
         _url(f"/webhook/set/{config.EVOLUTION_INSTANCE}"),
         headers=_headers(),
         json=payload,
@@ -117,14 +118,12 @@ def status_instancia() -> str:
     """Retorna o estado da conexão: open, close, connecting."""
     try:
         resp = requests.get(
-            _url(f"/instance/fetchInstances"),
+            _url(f"/instance/connectionState/{config.EVOLUTION_INSTANCE}"),
             headers=_headers(),
             timeout=10,
         )
-        instances = resp.json()
-        for inst in (instances if isinstance(instances, list) else [instances]):
-            if inst.get("instance", {}).get("instanceName") == config.EVOLUTION_INSTANCE:
-                return inst["instance"].get("state", "unknown")
+        data = resp.json()
+        return data.get("instance", {}).get("state", "unknown")
     except Exception as e:
         log.warning("Erro ao consultar instância: %s", e)
     return "unknown"
