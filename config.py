@@ -8,8 +8,8 @@ import os
 # ─────────────────────────────────────────────
 # LEGACY PANEL
 # ─────────────────────────────────────────────
-LEGACY_BASE_URL = os.getenv("LEGACY_BASE_URL", "https://painellegacy.space/api")
-LEGACY_USERNAME = os.getenv("LEGACY_USERNAME", "seu_usuario_aqui")
+LEGACY_BASE_URL = os.getenv("LEGACY_BASE_URL", "https://painellegacy.space/api").rstrip("/")
+LEGACY_USERNAME = os.getenv("LEGACY_USERNAME", "seu_usuario_aqui").rstrip("/")
 LEGACY_PASSWORD = os.getenv("LEGACY_PASSWORD", "sua_senha_aqui")
 
 # ─────────────────────────────────────────────
